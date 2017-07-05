@@ -111,7 +111,7 @@ class HomeView(LoginRequiredMixin, View):
         # recommended_games = sorted(recommended_games.items(), key=operator.itemgetter(0))
         recommended_games = sorted(recommended_games.items(),
                                   key=lambda kv: kv[1]['score'], reverse=True)
-        return recommended_games[:5]
+        return recommended_games[:10]
 
     def get(self, request):
         step = int(request.GET.get('step', 100))
