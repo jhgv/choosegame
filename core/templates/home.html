@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'navbar.html' %}
+<div class="row">
+    <div class="col-md-3" data-example-id="">
+        <h3>User preferences</h3>
+        <form method="post">
+          {% csrf_token %}
+          <h5 for="platform">Platform</h5>
+          <div class="form-group">
+
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="ps4" name="platform" {% if 'ps4' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">ps4</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="xbox one" name="platform" {% if 'xbox one' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">xbox one</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="pc" name="platform" {% if 'pc' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">pc</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="x360" name="platform" {% if 'x360' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">x360</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="ps3" name="platform" {% if 'ps3' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">ps3</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="playstation 4" name="platform"{% if 'playstation 4 ' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">playstation 4</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="playstation 3" name="platform"{% if 'playstation 3 ' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">playstation 3</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="wii" name="platform"{% if 'wii ' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">wii</span>
+          </label><br>
+            <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="3ds" name="platform"{% if '3ds ' in request.user.preferences.platform %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">3ds</span>
+            </label>
+
+
+            <!-- <input name="platform" type="platform" class="form-control" id="exampleInputEmail1" aria-describedby="platformHelp" placeholder="Enter platform" value="{{request.user.preferences.platform}}"> -->
+            <!-- <small id="platformHelp" class="form-text text-muted">Ex.: ps4, xbox, xbox one.</small> -->
+          </div>
+
+          <div class="form-group">
+            <h5 for="platform">Genre</h5>
+            {% for genre in genres %}
+              <label class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" value="{{genre}}" name="genre"{% if genre in request.user.preferences.get_genres_list %} checked {% endif %}>
+              <span class="custom-control-indicator"></span>
+              <span class="custom-control-description">{{genre}}</span>
+            </label>
+            {% endfor %}
+            <!-- <input name="genre" type="platform" class="form-control" id="exampleInputEmail1" aria-describedby="platformHelp" placeholder="Enter genre" value="{{request.user.preferences.genre}}"> -->
+            <!-- <small id="platformHelp" class="form-text text-muted">Ex.: Action, thriller.</small> -->
+          </div>
+
+          <div class="form-group">
+                <h5 for="platform">Price</h5>
+                <div class="form-check">
+
+                  <label class="form-check-label">
+                    <input name="price" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="" {% if request.user.preferences.price == '' %} checked {% endif %}>
+                    Ignore price
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input name="price" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="1" {% if request.user.preferences.price == '1' %} checked {% endif %}>
+                    0 - R$ 40,00
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input name="price" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="2" {% if request.user.preferences.price == '2' %} checked {% endif %}>
+                    R$ 40,00 - R$ 80,00
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input name="price" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="3" {% if request.user.preferences.price == '3' %} checked {% endif %}>
+                    R$ 80,00 - R$ 120,00
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input name="price" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="4" {% if request.user.preferences.price == '4' %} checked {% endif %}>
+                    R$ 120,00 +
+                  </label>
+                </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Save preferences</button>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <div class="list-group">
+            <h1> Games list</h1>
+            {% for game in games %}
+            <div class="card">
+              <div class="card-block">
+                  <div style="float: right;">
+                      <a class="btn btn-primary text-white" href="/like?genre={{game.genero}}&price={{game.preco}}&platform={{game.plataforma}}">Like</a>
+                  </div>
+
+                  <!-- <form method="post" >
+                      <button class="btn btn-primary">Like</button>
+                  </form> -->
+                <h4 class="card-title">{{game.titulo}}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{game.preco | upper}}</h6>
+                <span class="card-text">Platform: {{game.plataforma}} | Genre: {{game.genero}} {% if game.desenvolvedor %}| Publisher: {{game.desenvolvedor}}{% endif %}</span><br />
+                <a href="{{game.url}}" target="_blank" class="card-link">Buy</a>
+
+                <!-- <a href="#" class="card-link">Another link</a> -->
+              </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="list-group">
+            <h1> Top {{recommended_games|length}} for you</h1>
+            {% for key, game in recommended_games %}
+            <div class="card">
+              <div class="card-block">
+                <h4 class="card-title">{{game.titulo}}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{game.preco | upper}}</h6>
+                <span class="card-text">Platform: {{game.plataforma}} | Genre: {{game.genero}} {% if game.desenvolvedor %}| Publisher: {{game.desenvolvedor}}{% endif %}</span><br />
+                <a href="{{game.url}}" target="_blank" class="card-link">Comprar</a>
+                <!-- <a href="#" class="card-link">Another link</a> -->
+              </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
