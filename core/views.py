@@ -24,7 +24,8 @@ class LoginView(View):
             login(request, user)
             return redirect('/')
         else:
-            print("Erro")
+            context = {"err" : "Invalid credentials."}
+            return render(request, 'login.html', context)
 
 class LogoutView(View):
     def get(self, request):
@@ -67,23 +68,41 @@ class HomeView(LoginRequiredMixin, View):
         for game in games:
             score = 0
 
-            if preferences.platform and game['plataforma'] == preferences.platform:
+            game['p_platform'] = False
+            platform = str(game['plataforma'])
+            # print(str(game['plataforma']))
+
+            if preferences.platform and platform in  preferences.platform.split(","):
                 score = score + 1
+                game['p_platform'] = True
 
             genres = str(game['genero']).split(",")
             user_genres = preferences.genre.split(",")
-            common_genres = [g for g in user_genres for g2 in genres if g in g2]
-            if len(common_genres) > 0:
+            game['p_genre'] = False
+            for genre in genres:
+                print(genre)
+                for ug in user_genres:
+                    if genre is not None and ug is not None and ug == genre:
+                        print(genre + " - " + ug)
+                        game['p_genre'] = True
+
+
+            # common_genres = [g for g in user_genres for g2 in genres if g in g2]
+            if game['p_genre']:
                 score = score + 1
+
 
             price = get_clean_price(game['preco'])
             price_interval = get_price_interval(float(price))
 
             if preferences.price and price_interval == preferences.price:
-
                 score = score + 1
+                game['p_price'] = True
 
             game['score'] = score
+
+
+
 
             if score > 0:
                 recommended_games[counter] = game
