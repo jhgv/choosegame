@@ -112,7 +112,35 @@
         </form>
     </div>
 
-    <div class="col-md-6">
+
+
+    <div class="col-md-4">
+      {% if recommended_games %}
+        <div class="list-group">
+
+            <h1> Top {{recommended_games|length}} for you</h1>
+            {% for key, game in recommended_games %}
+            <div class="card">
+              <div class="card-block">
+                <!-- <span class="badge badge-primary">score: {{game.score}}</span> -->
+                <h4 class="card-title">{{game.titulo}}  </h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{game.preco | upper}}</h6>
+
+                <!-- <h6 class="card-subtitle mb-2 text-muted">platform: {{game.p_platform}}</h6> -->
+                <!-- <h6 class="card-subtitle mb-2 text-muted">genre: {{game.p_genre}}</h6> -->
+                <!-- <h6 class="card-subtitle mb-2 text-muted">price {{game.p_price}}</h6> -->
+                <span class="card-text">Platform: {{game.plataforma}} | Genre: {{game.genero}} {% if game.desenvolvedor %}| Publisher: {{game.desenvolvedor}}{% endif %}</span><br />
+                <a href="{{game.url}}" target="_blank" class="card-link">Buy</a>
+                <a href="{{game.url}}" target="_blank" class="card-link">Not interested</a>
+                <!-- <a href="#" class="card-link">Another link</a> -->
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-5">
         <div class="list-group">
             <h1> Games list</h1>
             {% for game in games %}
@@ -136,29 +164,6 @@
             {% endfor %}
 
         </div>
-    </div>
-
-    <div class="col-md-3">
-      {% if recommended_games %}
-        <div class="list-group">
-
-            <h1> Top {{recommended_games|length}} for you</h1>
-            {% for key, game in recommended_games %}
-            <div class="card">
-              <div class="card-block">
-                <h4 class="card-title">{{game.titulo}}  <span class="badge badge-primary">{{game.score}}</span></h4>
-                <h6 class="card-subtitle mb-2 text-muted">{{game.preco | upper}}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">platform: {{game.p_platform}}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">genre: {{game.p_genre}}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">price {{game.p_price}}</h6>
-                <span class="card-text">Platform: {{game.plataforma}} | Genre: {{game.genero}} {% if game.desenvolvedor %}| Publisher: {{game.desenvolvedor}}{% endif %}</span><br />
-                <a href="{{game.url}}" target="_blank" class="card-link">Comprar</a>
-                <!-- <a href="#" class="card-link">Another link</a> -->
-              </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %}
