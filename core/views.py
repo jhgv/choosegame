@@ -83,8 +83,6 @@ class HomeView(LoginRequiredMixin, View):
 
                 score = score + 1
 
-
-
             game['score'] = score
 
             if score > 0:
@@ -123,3 +121,85 @@ class HomeView(LoginRequiredMixin, View):
             preference = UserPreference(user=request.user, platform=platform, genre=genre, price=price)
         preference.save()
         return HttpResponseRedirect('/')
+
+
+class MeasureView(LoginRequiredMixin, View):
+
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    def get_recommended(self, games):
+        preferences = self.request.user.preferences
+        recommended_games = {}
+        counter = 1
+        for game in games:
+            score = 0
+
+            if preferences.platform and game['plataforma'] == preferences.platform:
+                score = score + 1
+
+            genres = str(game['genero']).split(",")
+            user_genres = preferences.genre.split(",")
+            common_genres = [g for g in user_genres for g2 in genres if g in g2]
+            if len(common_genres) > 0:
+                score = score + 1
+
+            price = get_clean_price(game['preco'])
+            price_interval = get_price_interval(float(price))
+
+            if preferences.price and price_interval == preferences.price:
+
+                score = score + 1
+
+            game['score'] = score
+
+            if score > 0:
+                recommended_games[counter] = game
+                counter = counter + 1
+
+        # recommended_games = sorted(recommended_games.items(), key=operator.itemgetter(0))
+        recommended_games = sorted(recommended_games.items(),
+                                  key=lambda kv: kv[1]['score'], reverse=True)
+        return recommended_games
+
+    def get_precision(self, games):
+        relevant_num = 0
+
+        for game in games:
+            if game[1]['score'] > 1 :
+                relevant_num = relevant_num + 1
+
+        return relevant_num/len(games)
+
+    def get_coverage(self, games, rgames):
+        coverage = 0
+
+        for game in rgames:
+            if game[1]['score'] > 0 :
+                coverage = coverage + 1
+
+        return coverage/len(games)
+
+
+    def get_f_measure(self, p, c):
+
+        return ((2 * p * c) / p + c)
+
+
+    def get(self, request):
+        measure_table = []
+        step = int(request.GET.get('step', 100))
+        genres = GENRES_LIST
+        games_file = open(os.path.join(settings.BASE_DIR, 'jogos.json'))
+        games = json.load(games_file)
+        recommended_games = {}
+        if UserPreference.objects.filter(user=request.user).count() > 0:
+            recommended_games = self.get_recommended(games)
+
+        precision = self.get_precision(recommended_games)
+        coverage = self.get_coverage(games, recommended_games)
+        fmeasure = self.get_f_measure(precision, coverage)
+
+        context = {'games' : games[:step], 'recommended_games' : recommended_games, 'precision': precision, 'coverage':coverage, 'fmeasure': fmeasure}
+
+        return render(request, 'measure.html', context=context)

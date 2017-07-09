@@ -2,7 +2,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 
-from core.views import HomeView, LoginView, LogoutView, LikeView
+from core.views import HomeView, LoginView, LogoutView, LikeView, MeasureView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/', LogoutView.as_view(), name='logout'),
     url(r'^like/', LikeView.as_view(), name='like'),
+    url(r'^measure/', MeasureView.as_view(), name='measure'),
 ]

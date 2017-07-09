@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th># Games</th>
+      <th>Coverage</th>
+      <th>Precision</th>
+      <th>F-Measure</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">{{recommended_games | length}}</th>
+      <td>{{coverage}}</td>
+      <td>{{precision}}</td>
+      <td>{{fmeasure}}</td>
+    </tr>
+
+  </tbody>
+</table>
+{% endblock %}
